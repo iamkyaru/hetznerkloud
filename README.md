@@ -2,13 +2,13 @@
 
 ## Installing the package
 
-Add to `build.gradle.kt` dependencies block.
+Add to `build.gradle.kts` dependencies block.
 
 ```Kotlin
 dependencies {
-    implementation("tech.s-co.hetznerkloud:0.1.+")
+    implementation("tech.s-co:hetznerkloud:0.1.+")
     // or if you always want the latest version
-    implementation("tech.s-co.hetznerkloud:latest.release")
+    implementation("tech.s-co:hetznerkloud:latest.release")
 }
 ```
 
@@ -25,7 +25,7 @@ fun main() {
     runBlocking {
         val apiToken = ApiToken.load(Path("/some/path/token.txt"))
 
-        val client = CloudApiClient(apiToken)
+        val client = CloudApiClient.of(apiToken)
         
         client.servers.all(
             filter = setOf(Pair(FilterFields.Server.STATUS, "running")), 
@@ -54,7 +54,7 @@ fun main() {
     runBlocking {
         val apiToken = ApiToken.load(Path("/some/path/token.txt"))
 
-        val client = CloudApiClient(apiToken)
+        val client = CloudApiClient.of(apiToken)
 
         try {
             client.sshKeys.create(CreateSSHKey(name = "login key", labels = emptyMap()))
@@ -78,7 +78,7 @@ By default, the following ones are installed and used by this library:
 
 For example let's add retry behaviour with a plugin:
 ```kotlin
-val client = CloudApiClient(ApiToken("xxx-xxx-xxx")) {
+val client = CloudApiClient.of(ApiToken("xxx-xxx-xxx")) {
     install(HttpRequestRetry) {
         retryOnServerErrors(maxRetries = 5)
     }
